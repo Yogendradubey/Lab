@@ -14,7 +14,5 @@ Technology Stack
 
 
 
-Follow below Steps to run project in Local
-
-Steps 1 : Change ConnetionStrings in appSettings.Json file
+Read Application.docx file to configure and run project locally 
 
