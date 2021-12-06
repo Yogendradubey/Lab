@@ -1,23 +1,25 @@
+using LaboratoryAPI.Data.Interface;
+using LaboratoryAPI.Data.Model;
+using LaboratoryAPI.Data.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using LabAPI.Data;
-using LabAPI.Repository;
-using LabAPI.Repository.IRepository;
-using AutoMapper;
-using LabAPI.LabMapper;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.Extensions.Options;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace LabAPI
+namespace LaboratoryAPI
 {
     public class Startup
     {
@@ -28,93 +30,78 @@ namespace LabAPI
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
-           
-            services.AddDbContext<ApplicationDbContext>
-                (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IPatientRepository, Repository>();
+            services.AddScoped<IReportRepository, Repository>();
+            services.AddScoped<IUserRepository, Repository>();
 
-            services.AddScoped<ITestResultRepository, TestResultRepository>();
-            services.AddScoped<IPatientDetails, PatientDetailRepository>();
-            services.AddScoped<ILabTestRepository, LabTestRepository>();
-           
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddAutoMapper(typeof(LabMappings));
-            services.AddApiVersioning(options =>
-            {
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.DefaultApiVersion = new ApiVersion(1, 0);
-                options.ReportApiVersions = true;
-            });
-            services.AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV");
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-            services.AddSwaggerGen();
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            
-            services.Configure<AppSettings>(appSettingsSection);
-
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.AddMvc(options =>
-            {
-                options.SuppressAsyncSuffixInActionNames = false;
-            });
-            services.AddRouting(option =>
-            {
-                option.ConstraintMap["slugify"] = typeof(SlugifyParameterTransformer);
-                option.LowercaseUrls = true;
-            });
+            services.AddControllers();
 
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x=> {
+            }).AddJwtBearer(x =>
+            {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
+                x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetValue<string>("Key")))
                 };
             });
 
+            //services.AddSingleton<IUserRepository>(new Repository(key));
+            services.AddDbContext<LaboratoryDbContext>(option => option.UseInMemoryDatabase("MyDB"));
+            services.AddSwaggerGen(c =>
+            {
+                c.EnableAnnotations();
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "LaboratoryAPI", Version = "v1" });
+               
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] {}
 
-            services.AddControllers();
+                    }
+                });
+            });
+        
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LaboratoryAPI v1"));
             }
 
             app.UseHttpsRedirection();
-            app.UseSwagger();
-            app.UseSwaggerUI(options => {
-               foreach(var desc in provider.ApiVersionDescriptions)
-                    options.SwaggerEndpoint($"/swagger/{desc.GroupName}/swagger.json",
-                        desc.GroupName.ToUpperInvariant());
-                options.RoutePrefix = "";
-            });
 
-            //app.UseSwaggerUI(options=> {
-            //    options.SwaggerEndpoint("/swagger/LabOpenAPISpec/swagger.json", "Lab API");
-            //    //options.SwaggerEndpoint("/swagger/LabOpenAPISpecTrails/swagger.json", "Lab API ");
-            //    options.RoutePrefix = "";
-            //});
             app.UseRouting();
-            app.UseCors(x => x
-              .AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader());
             app.UseAuthentication();
             app.UseAuthorization();
 
