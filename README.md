@@ -56,7 +56,7 @@
 	Report details in LabReport class
 	
 	
-#Operations Supported with endpoints
+**#Operations Supported with endpoints**
 	Operations supported with endpoint details, sample URL and payload information 
 	
            1. Endpoint Register Admin User
@@ -133,21 +133,21 @@
 	5. Postman can also be configured (as per above url and payload details) for generating and passing token  <br/> 
 	
 **#Steps to run with Swagger**
-        1. Execute endpoint Register user using postman with user details
-	2. Execute endpoint Login (Credentials as in Login endpoint details above) to generate token
-	3. Once token is generated, copy the generated token
-	4. Click Authorize button in page header to open "Available Authorizations" dialogue
-	5. Enter 'Bearer' [space] and then token in the text input under value
-	6. click Authorize and then Close button
-	7. Now you are ready to run, follow sequence as below to handle data dependencies 
-	8. Create Patient (if executed Get(), Will get Patient table data)	
-	9. Create LabReport (if executed Get(), Will get LabReport table data)
+        1. Execute endpoint Register user using postman with user details <br/> 
+	2. Execute endpoint Login (Credentials as in Login endpoint details above) to generate token <br/> 
+	3. Once token is generated, copy the generated token <br/> 
+	4. Click Authorize button in page header to open "Available Authorizations" dialogue <br/> 
+	5. Enter 'Bearer' [space] and then token in the text input under value <br/> 
+	6. click Authorize and then Close button <br/> 
+	7. Now you are ready to run, follow sequence as below to handle data dependencies  <br/> 
+	8. Create Patient (if executed Get(), Will get Patient table data)	 <br/> 
+	9. Create LabReport (if executed Get(), Will get LabReport table data) <br/> 
 
 **#Steps to run with Postman** 
-	1. Configure Postman requests as per information above
-	2. Execute Login (Credentials as above) to generate token
-	3. Once token is generated, copy the generated token to pass with subsequet requests
-	4. Follow sequence as below to handle data dependencies 
-	5. Create Patient (if executed Get(), Will get Patient table data)	
-	6. Create LabReport (if executed Get(), Will get LabReport table data)
+	1. Configure Postman requests as per information above  <br/> 
+	2. Execute Login (Credentials as above) to generate token <br/> 
+	3. Once token is generated, copy the generated token to pass with subsequet requests <br/> 
+	4. Follow sequence as below to handle data dependencies  <br/> 
+	5. Create Patient (if executed Get(), Will get Patient table data)	 <br/> 
+	6. Create LabReport (if executed Get(), Will get LabReport table data) <br/> 
 
