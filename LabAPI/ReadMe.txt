@@ -125,15 +125,17 @@
 	5. Postman can also be configured (as per above url and payload details) for generating and passing token
 	
 #Steps to run with Swagger
-	1. Execute endpoint Login (Credentials as in Login endpoint details above) to generate token
-	2. Once token is generated, copy the generated token
-	3. Click Authorize button in page header to open "Available Authorizations" dialogue
-	4. Enter 'Bearer' [space] and then token in the text input under value
-	5. click Authorize and then Close button
-	6. Now you are ready to run, follow sequence as below to handle data dependencies 
+	1. Create new user using CreateUser endpoint
+	2. Once new user is created Login (use the credentials which is used to create a user) to generate token
+	3. Once token is generated, copy the generated token
+	4. Click Authorize button in page header to open "Available Authorizations" dialogue
+	5. Enter 'Bearer' [space] and then token in the text input under value
+	6. click Authorize and then Close button
+	7. Now you are ready to run, follow sequence as below to handle data dependencies 
 
 #Steps to run with Postman
 	1. Configure Postman requests as per information above
-	2. Execute Login (Credentials as above) to generate token
-	3. Once token is generated, copy the generated token to pass with subsequet requests
-	4. Follow sequence as below to handle data dependencies 
+	2. Create new user using CreateUser endpoint
+	3. Once new user is created Login (use the credentials which is used to create a user) to generate token
+	4. Once token is generated, copy the generated token to pass with subsequet requests
+	5. Follow sequence as below to handle data dependencies 
