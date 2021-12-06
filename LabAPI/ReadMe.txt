@@ -9,8 +9,7 @@
 	Need application that is capable of
 	1. Generate authentication token for security access
 	2. Creating/Managing Patient securely
-	3. Creating/Managing Test securely
-	4. Creating/Managing/Reporting Test Reports securely
+	3. Creating/Managing/Reporting Test Reports securely
 
 # Tables (As model classes for In-Memory DB implementation)
 	UserCredential
@@ -68,97 +67,60 @@
 #Operations Supported with endpoints
 	Operations supported with endpoint details, sample URL and payload information 
 	
-	1. Endpoint Login
-		* Login : (Post : https://localhost:44385/Login)
+	1. Endpoint User
+		* Create: (Post : https://localhost:44385/api/User/CreateUser)
 			{
 				"username": "Demouser",
 				"password": "DemoPassword"
-			}			
+			}	
+		* Login: (Post : https://localhost:44385/api/User/Login)
+			{
+				"username": "Demouser",
+				"password": "DemoPassword"
+			}				
 	2. Endpoint Patient
 		* Create : (Post : https://localhost:44367/Patient/Create)
 			{
-				"id": 0,
-				"patientName": "Test Patient 1",
-				"dateOfBirth": "1980-05-25T00:00:00",
-				"patientGender": 1,
-				"emailId": "testpatient1@gmail.com",
-				"contactNumber": "(+91) 98235xxxxx",
-				"address": "Pune, Maharashtra, India - 411018"
+  				"name": "string",
+  				"dob": "2021-12-06T13:38:20.497Z",
+  				"gender": 0
 			}
-		* Update : (Put : https://localhost:44367/Patient/Update/1)
+		* Update : (Put : https://localhost:44385/api/Patient/1)
 			{
-				"id": 1,
-				"patientName": "Test Patient 1 Modified",
-				"dateOfBirth": "1980-05-25T00:00:00",
-				"patientGender": 1,
-				"emailId": "testpatient1@gmail.com",
-				"contactNumber": "(+91) 98235xxxxx",
-				"address": "Pune, Maharashtra, India - 411018"
+  				"name": "string",
+  				"dob": "2021-12-06T13:38:58.572Z",
+  				"gender": 0
 			}
-		* Delete : (Delete : https://localhost:44367/Patient/Delete/1)
-		* Restore : (Put : https://localhost:44367/Patient/Restore/1)
-		* GetAll : (Get : https://localhost:44367/Patient/Get)
-		* GetById : (Get : https://localhost:44367/Patient/Get/1)
+			
+		* Delete : (Delete : https://localhost:44385/api/Patient/1)
+		* GetAll : (Get : https://localhost:44385/api/Patient)
+		* GetById : (Get : https://localhost:44385/api/Patient/1)
+		* GetByReportType: (Get : https://localhost:44385/api/Patient/GetByReportType/1/2021-01-01/2021-12-31)
 		
-	3. Endpoint LabTest
-		* Create : (Post : https://localhost:44367/LabTest/Create)
-			{
-				"id": 0,
-				"testType": 1,
-				"description": "Blood Count",
-				"sampleType": 1,
-				"minimumRequiredQty": 50,
-				"minLimit": 100,
-				"maxLimit": 1000
-			}		
-		* Update : (Put : https://localhost:44367/LabTest/Update/1)
-			{
-				"id": 1,
-				"testType": 1,
-				"description": "Blood Count Modified",
-				"sampleType": 1,
-				"minimumRequiredQty": 500,
-				"minLimit": 500,
-				"maxLimit": 5000
-			}		
-		* Delete : (Delete : https://localhost:44367/LabTest/Delete/1)
-		* Restore : (Put : https://localhost:44367/LabTest/Restore/1)
-		* GetAll : (Get : https://localhost:44367/LabTest/Get)
-		* GetById : (Get : https://localhost:44367/LabTest/Get/1)
 		
-	4. Endpoint LabReport
-		* Create : (Post : https://localhost:44367/LabReport/Create)
-			{
-				"id": 0,
-				"patientId": 1,
-				"labTestId": 1,
-				"sampleReceivedOn": "2021-01-10T00:00:00",
-				"sampleTestedOn": "2021-01-11T00:00:00",
-				"reportCreatedOn": "2021-01-12T00:00:00",
-				"testResult": 125,
-				"refferredBy": "Dr. Physician 1"
+	3. Endpoint LabReport
+		* Create : (Post : https://localhost:44385/api/Report)
+			{				
+  				"type": 0,
+  				"result": 0,
+  				"sampleCollectionDateTime": "2021-12-06T13:46:03.241Z",
+  				"patientId": 0
 			}
-		* Update : (Put : https://localhost:44367/LabReport/Update/1)
+		* Update : (Put : https://localhost:44385/api/Report/1)
 			{
-				"id": 1,
-				"patientId": 1,
-				"labTestId": 1,
-				"sampleReceivedOn": "2021-01-10T00:00:00",
-				"sampleTestedOn": "2021-01-11T00:00:00",
-				"reportCreatedOn": "2021-01-12T00:00:00",
-				"testResult": 125,
-				"refferredBy": "Dr. Physician 1 Modified"
+  				"type": 0,
+  				"result": 0,
+  				"sampleCollectionDateTime": "2021-12-06T13:46:58.593Z",
+  				"patientId": 0
 			}
-		* Delete : (Delete : https://localhost:44367/LabReport/Delete/1)
-		* Restore : (Put : https://localhost:44367/LabReport/Restore/1)
-		* GetAll : (Get : https://localhost:44367/LabReport/Get)
-		* GetById : (Get : https://localhost:44367/LabReport/Get/1)
-		* GetByLabTest : (Get : https://localhost:44367/LabReport/GetByLabTest/1/2021-01-01/2021-12-31)
+		* Delete : (Delete : https://localhost:44385/api/Report/1)
+		* GetAll : (Get : https://localhost:44385/api/Report)
+		* GetById : (Get : https://localhost:44385/api/Report/1)
+	
 		
 #Installation
 	1. Copy code in a folder
-	2. Open LabTest soultion using Microsoft Visual Studio (LabTests.sln)
-	3. Build and Run project HCA.API.LabTests
+	2. Open LabTest soultion using Microsoft Visual Studio (LaboratoryAPI.sln)
 	4. Application should run in browser using Swagger UI
 	5. Postman can also be configured (as per above url and payload details) for generating and passing token
 	
@@ -169,15 +131,9 @@
 	4. Enter 'Bearer' [space] and then token in the text input under value
 	5. click Authorize and then Close button
 	6. Now you are ready to run, follow sequence as below to handle data dependencies 
-	7. Create Patient (if executed Get(), will create hardcoded Patients from backed if Patient table is empty)
-	8. Create LabTest (if executed Get(), will create hardcoded Tests from backed if LabTest table is empty)
-	9. Create LabReport (if executed Get(), will create hardcoded LabReports from if when LabReport table is empty)
 
 #Steps to run with Postman
 	1. Configure Postman requests as per information above
 	2. Execute Login (Credentials as above) to generate token
 	3. Once token is generated, copy the generated token to pass with subsequet requests
 	4. Follow sequence as below to handle data dependencies 
-	5. Create Patient (if executed Get(), will create hardcoded Patients from backed if Patient table is empty)
-	6. Create LabTest (if executed Get(), will create hardcoded Tests from backed if LabTest table is empty)
-	7. Create LabReport (if executed Get(), will create hardcoded LabReports from backed if LabReport table is empty)

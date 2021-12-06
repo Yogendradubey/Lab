@@ -53,7 +53,7 @@ namespace LaboratoryAPI.Controllers
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        [HttpGet("GetByFilter")]
+        [HttpGet("GetByReportType")]
         public ActionResult<IEnumerable<Patient>> Get([FromQuery] ReportFilterRequest filter)
         {
             try {
