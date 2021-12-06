@@ -13,7 +13,6 @@ namespace LaboratoryAPI.Data.Repository
         {
 
         }
-
         public DbSet<Report> Report { get; set; }
         public DbSet<Patient> Patient { get; set; }
         public DbSet<UserCredential> UserCredential { get; set; }

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static LaboratoryAPI.Data.Model.Enum;
 
 namespace LaboratoryAPI.Controllers
 {
@@ -16,10 +17,10 @@ namespace LaboratoryAPI.Controllers
     [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     public class ReportController : ControllerBase
     {
-        private readonly IReportRepository _repo;
-        public ReportController(IReportRepository repo)
+        private readonly IReportRepository _db;
+        public ReportController(IReportRepository reportRepository)
         {
-            _repo = repo;
+            _db = reportRepository;
         }
 
         /// <summary>
@@ -30,7 +31,7 @@ namespace LaboratoryAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Report>> Get()
         {
-            List<Report> reports = _repo.GetAllReports();
+            List<Report> reports = _db.GetAllReports();
             return Ok(reports);
         }
 
@@ -42,7 +43,7 @@ namespace LaboratoryAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult Get(int id)
         {
-            Report report = _repo.GetReport(id);
+            Report report = _db.GetReport(id);
             return Ok(report);
         }
 
@@ -58,10 +59,10 @@ namespace LaboratoryAPI.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest("Not a valid request");
+                    return BadRequest(ResponseMessage.NotAValidRequest.ToString());
                 }
 
-                Report savedReport = _repo.AddReport(report);
+                Report savedReport = _db.AddReport(report);
 
                 return Ok(savedReport);
             }
@@ -84,11 +85,11 @@ namespace LaboratoryAPI.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest("Not a valid request");
+                    return BadRequest(ResponseMessage.NotAValidRequest.ToString());
                 }
-                string isUpdated = _repo.UpdateReport(id, report);
+                string isUpdated = _db.UpdateReport(id, report);
 
-                if (isUpdated == "Record not found")
+                if (isUpdated == ResponseMessage.RecordNotFound.ToString())
                 {
                     return NotFound(isUpdated);
                 }
@@ -98,7 +99,7 @@ namespace LaboratoryAPI.Controllers
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }            
 
-            return Ok("Updated successfully");
+            return Ok(ResponseMessage.UpdatedSuccessfully.ToString());
         }
 
         /// <summary>
@@ -109,14 +110,14 @@ namespace LaboratoryAPI.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            string isDeleted = _repo.DeleteReport(id);
+            string isDeleted = _db.DeleteReport(id);
 
-            if (isDeleted == "Record not found")
+            if (isDeleted == ResponseMessage.RecordNotFound.ToString())
             {
                 return NotFound(isDeleted);
             }
 
-            return Ok();
+            return Ok(ResponseMessage.DelectedSuccessfully.ToString());
         }
     }
 }

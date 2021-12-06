@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using static LaboratoryAPI.Data.Model.Enum;
 
 namespace LaboratoryAPI.Controllers
 {
@@ -17,10 +18,10 @@ namespace LaboratoryAPI.Controllers
     [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     public class PatientController : ControllerBase
     {
-        private readonly IPatientRepository _repo;
-        public PatientController(IPatientRepository repo)
+        private readonly IPatientRepository _db;
+        public PatientController(IPatientRepository patientRepository)
         {
-            _repo = repo;
+            _db = patientRepository;
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace LaboratoryAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Patient>> Get()
         {
-            List<Patient> patients = _repo.GetAllPatients();
+            List<Patient> patients = _db.GetAllPatients();
             return Ok(patients);
         }
 
@@ -43,7 +44,7 @@ namespace LaboratoryAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult Get(int id)
         {
-            Patient patient = _repo.GetPatient(id);
+            Patient patient = _db.GetPatient(id);
             return Ok(patient);
         }
 
@@ -59,14 +60,14 @@ namespace LaboratoryAPI.Controllers
                 DateTime temp;
                 if (DateTime.TryParse(filter.CreatedOnStart.ToString(), out temp) && DateTime.TryParse(filter.CreatedOnEnd.ToString(), out temp))
                 {
-                    List<Patient> patients = _repo.GetPatientsByFilter(filter);
+                    List<Patient> patients = _db.GetPatientsByFilter(filter);
                     if (patients != null)
                     {
                         return Ok(patients);
                     }
                     else
                     {
-                        return NotFound("Data not found");
+                        return NotFound(ResponseMessage.RecordNotFound.ToString());
                     }
                 }
                 else
@@ -92,10 +93,10 @@ namespace LaboratoryAPI.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest("Not a valid request");
+                    return BadRequest(ResponseMessage.NotAValidRequest.ToString());
                 }
 
-                Patient savedPatient = _repo.AddPatient(patient);
+                Patient savedPatient = _db.AddPatient(patient);
 
                 return Ok(savedPatient);
             }
@@ -117,11 +118,11 @@ namespace LaboratoryAPI.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest("Not a valid request");
+                    return BadRequest(ResponseMessage.NotAValidRequest.ToString());
                 }
-                string IsUpdated = _repo.UpdatePatient(id, patient);
+                string IsUpdated = _db.UpdatePatient(id, patient);
 
-                if (IsUpdated == "Record not found")
+                if (IsUpdated == ResponseMessage.RecordNotFound.ToString())
                 {
                     return NotFound(IsUpdated);
                 }
@@ -131,7 +132,7 @@ namespace LaboratoryAPI.Controllers
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }           
 
-            return Ok("Updated successfully");
+            return Ok(ResponseMessage.UpdatedSuccessfully.ToString());
         }
 
         /// <summary>
@@ -142,9 +143,9 @@ namespace LaboratoryAPI.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            string isDeleted = _repo.DeletePatient(id);
+            string isDeleted = _db.DeletePatient(id);
 
-            if (isDeleted == "Record not found")
+            if (isDeleted == ResponseMessage.RecordNotFound.ToString())
             {
                 return NotFound(isDeleted);
             }

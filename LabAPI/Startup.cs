@@ -32,9 +32,9 @@ namespace LaboratoryAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IPatientRepository, Repository>();
-            services.AddScoped<IReportRepository, Repository>();
-            services.AddScoped<IUserRepository, Repository>();
+            services.AddScoped<IPatientRepository, PatientRepository>();
+            services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddControllers();
 

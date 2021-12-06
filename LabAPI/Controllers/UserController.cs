@@ -2,6 +2,7 @@
 using LaboratoryAPI.Data.Model;
 using LaboratoryAPI.Data.Model.RequestModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,10 @@ namespace LaboratoryAPI.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _repo;
-        public UserController(IUserRepository repo)
+        private readonly IUserRepository _db;
+        public UserController(IUserRepository userRepository)
         {
-            _repo = repo;
+            _db = userRepository;
         }
 
         /// <summary>
@@ -28,12 +29,15 @@ namespace LaboratoryAPI.Controllers
         [HttpPost("CreateUser")]
         public ActionResult Post([FromBody] UserRequest userCredential)
         {
-            var token = _repo.CreateUser(userCredential.UserName, userCredential.Password);
-            if (token == null)
+            try
             {
-                return Unauthorized();
+                string userCreated = _db.CreateUser(userCredential.UserName, userCredential.Password);
+                return Ok(userCreated);
             }
-            return Ok(token);
+            catch
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }           
         }
 
         /// <summary>
@@ -45,7 +49,7 @@ namespace LaboratoryAPI.Controllers
         [HttpPost("authentication")]
         public IActionResult Authentication([FromBody] UserRequest userCredential)
         {
-            var token = _repo.AuthenticateUser(userCredential.UserName, userCredential.Password);
+            var token = _db.AuthenticateUser(userCredential.UserName, userCredential.Password);
             if (token == null)
             {
                 return Unauthorized();
