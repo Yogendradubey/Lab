@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+using LabDemo.Models;
 namespace LabDemo.DataProvider
 {
     public class Patient
@@ -9,7 +9,7 @@ namespace LabDemo.DataProvider
         public string Name { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime DOB { get; set; }
-        public string Gender { get; set; }
+        public GenderEnum Gender { get; set; }
         public virtual List<LabReport> LabReports { get; set; }
 
     }
