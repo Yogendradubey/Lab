@@ -3,7 +3,7 @@
 # API Development
 •	ASP.NET Core 6.0 as base platform <br/>
 •	EF Core 6.0 as primary ORM <br/>
-•	JWT tokaen Authentication and authorization implemented <br/>
+•	JWT Tokens Authentication and authorization implemented <br/>
 •	Swashbuckle.AspNetCore.SwaggerGen for Swagger docs and UI <br/>
 •	AutoMapper.Extensions.Microsoft.DependencyInjection 8.1.1 for object to object mapping <br/>
 •	Repository design Pattern <br/>
