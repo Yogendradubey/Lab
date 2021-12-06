@@ -8,6 +8,7 @@
 •	AutoMapper.Extensions.Microsoft.DependencyInjection 8.1.1 for object to object mapping <br/>
 •	Repository design Pattern <br/>
 •	Used in memory Database using EF core <br/> 
+•	Added unit testing of api layer in UnitTest project using nunit <br/> 
 
 
 
