@@ -132,7 +132,7 @@
 	4. Application should run in browser using Swagger UI  <br/> 
 	5. Postman can also be configured (as per above url and payload details) for generating and passing token  <br/> 
 	
-**#Steps to run with Swagger**
+**#Steps to run with Swagger**  <br/> 
         1. Execute endpoint Register user using postman with user details <br/> 
 	2. Execute endpoint Login (Credentials as in Login endpoint details above) to generate token <br/> 
 	3. Once token is generated, copy the generated token <br/> 
@@ -143,7 +143,7 @@
 	8. Create Patient (if executed Get(), Will get Patient table data)	 <br/> 
 	9. Create LabReport (if executed Get(), Will get LabReport table data) <br/> 
 
-**#Steps to run with Postman** 
+**#Steps to run with Postman**   <br/> 
 	1. Configure Postman requests as per information above  <br/> 
 	2. Execute Login (Credentials as above) to generate token <br/> 
 	3. Once token is generated, copy the generated token to pass with subsequet requests <br/> 
