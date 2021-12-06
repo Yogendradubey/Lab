@@ -16,6 +16,8 @@ namespace LabDemo.Services.Mapper
             CreateMap<Models.LabReport, LabReport>();
             CreateMap<Patient, Models.Patient>();
             CreateMap<Models.Patient, Patient>();
+            CreateMap<User, Models.User>();
+            CreateMap<Models.User, User>();
         }
     }
 }

@@ -1,6 +1,7 @@
 using LabDemo.Api.Controllers;
 using LabDemo.Models;
 using LabDemo.Services.LabReports;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -33,14 +34,15 @@ namespace LabDemo.Api.Test
             /// setup
             labReportService.Setup(x => x.GetLabReport(It.IsAny<int>()))
             .Returns((int i) => labReports.Single(lb => lb.LRId == i));
-            //  labReportService.Setup(x => x.GetLabReport(1))
-            //.Returns(rep);
 
             var labReportController = new LabReportsController(logger.Object, labReportService.Object);
-            var reportExists = labReportController.Get(1);
-            Assert.IsNotNull(reportExists);
-            Assert.AreEqual(reportExists.LRId, 1);
-            Assert.AreEqual(reportExists.Result, "Pass");
+            var result =  labReportController.Get(1);//
+            var okResult = result as OkObjectResult;
+
+            // assert
+            Assert.IsNotNull(okResult);
+            Assert.AreEqual(200, okResult.StatusCode);
+
         }
         [Test]
         public void LabReport_GetById_InValidId()
@@ -56,8 +58,11 @@ namespace LabDemo.Api.Test
             //.Returns(rep);
 
             var labReportController = new LabReportsController(logger.Object, labReportService.Object);
-            var reportExists = labReportController.Get(2);
-            Assert.IsNull(reportExists);
+            var result = labReportController.Get(2);//
+            var okResult = result as OkObjectResult;
+
+            // assert
+            Assert.IsNull(okResult.Value);
             //Assert.That(() => labReportController.Get(5),
             //       Throws.Exception
             //             .TypeOf<InvalidOperationException>());

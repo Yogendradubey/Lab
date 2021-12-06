@@ -7,6 +7,8 @@ namespace LabDemo.DataProvider
         [Key]
         public int PId { get; set; }
         public string Name { get; set; }
+        public string Mobile { get; set; }
+        public string Email { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime DOB { get; set; }
         public GenderEnum Gender { get; set; }

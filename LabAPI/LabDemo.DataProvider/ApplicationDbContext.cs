@@ -11,6 +11,7 @@ namespace LabDemo.DataProvider
         }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<LabReport> LabReports { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 }

@@ -7,7 +7,7 @@ using LabDemo.Services.LabReports;
 
 namespace LabDemo.Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class LabReportsController : ControllerBase
@@ -22,37 +22,49 @@ namespace LabDemo.Api.Controllers
         }
         // GET: api/<LabReportsController>
         [HttpGet]
-        public IEnumerable<LabReport> Get()
+        public IActionResult Get()
         {
-            return _labReportService.GetLabReports();
+            return Ok(_labReportService.GetLabReports());
         }
 
         // GET api/<LabReportsController>/5
         [HttpGet("{id}")]
-        public LabReport Get(int id)
+        public IActionResult Get(int id)
         {
-            return _labReportService.GetLabReport(id);
+            if (id > 0)
+            {
+                return Ok(_labReportService.GetLabReport(id));
+            }
+            return BadRequest();
         }
 
         // POST api/<LabReportsController>
         [HttpPost]
-        public void Post([FromBody] LabReport labReport)
+        public IActionResult Post([FromBody] LabReport labReport)
         {
             _labReportService.AddLabReport(labReport);
+            return Ok();
         }
 
         // PUT api/<LabReportsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] LabReport labReport)
+        public IActionResult Put(int id, [FromBody] LabReport labReport)
         {
             _labReportService.UpdateLabReport(labReport);
+            return Ok();
         }
 
         // DELETE api/<LabReportsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
-            _labReportService.DeleteLabReport(id);
+            if (id > 0)
+            {
+                _labReportService.DeleteLabReport(id);
+                return Ok();
+            }
+            return BadRequest();
+
         }
     }
 }

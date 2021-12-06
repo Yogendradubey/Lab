@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LabDemo.Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class PatientsController : ControllerBase
@@ -21,16 +21,21 @@ namespace LabDemo.Api.Controllers
         }
         // GET: api/<PatientsController>
         [HttpGet]
-        public IEnumerable<Patient> Get()
+        public IActionResult Get()
         {
-            return _patientService.GetPatients();
+            return Ok( _patientService.GetPatients());
         }
 
         // GET api/<PatientsController>/5
         [HttpGet("{id}")]
-        public Patient Get(int id)
+        public IActionResult Get(int id)
         {
-            return _patientService.GetPatient(id);
+            if (id > 0)
+            {
+                return Ok(_patientService.GetPatient(id));
+            }
+            return BadRequest();
+            
         }
         /// <summary>
         /// Get Pataints with report type and date ranges
@@ -40,29 +45,37 @@ namespace LabDemo.Api.Controllers
         /// <param name="endDate"></param>
         /// <returns></returns>
         [HttpGet("{type}/{startDate}/{endDate}")]
-        public IEnumerable<Patient> Get(TestTypeEnum type ,DateTime startDate,DateTime endDate)
+        public IActionResult Get(TestTypeEnum type ,DateTime startDate,DateTime endDate)
         {
-            return _patientService.GetPatients(type, startDate, endDate);
+            return Ok( _patientService.GetPatients(type, startDate, endDate));
         }
         // POST api/<PatientsController>
         [HttpPost]
-        public void Post([FromBody] Patient patient)
+        public IActionResult Post([FromBody] Patient patient)
         {
             _patientService.AddPatient(patient);
+            return Ok();
         }
 
         // PUT api/<PatientsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Patient patient)
+        public IActionResult Put(int id, [FromBody] Patient patient)
         {
             _patientService.UpdatePatient(patient);
+            return Ok( );
         }
 
         // DELETE api/<PatientsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
-            _patientService.DeletePatient(id);
+            if (id>0)
+            {
+                _patientService.DeletePatient(id);
+                return Ok();
+            }
+            return BadRequest();
+            
         }
     }
 }
