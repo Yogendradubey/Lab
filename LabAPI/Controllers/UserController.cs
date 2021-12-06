@@ -46,7 +46,7 @@ namespace LaboratoryAPI.Controllers
         /// <param name="userCredential"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost("authentication")]
+        [HttpPost("Login")]
         public IActionResult Authentication([FromBody] UserRequest userCredential)
         {
             var token = _db.AuthenticateUser(userCredential.UserName, userCredential.Password);

@@ -53,7 +53,7 @@ namespace LaboratoryAPI.Controllers
         /// <param name="report"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Post([FromQuery]ReportRequest report)
+        public ActionResult Post([FromBody]ReportRequest report)
         {
             try
             {

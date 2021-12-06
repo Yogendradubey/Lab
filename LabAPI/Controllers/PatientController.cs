@@ -87,7 +87,7 @@ namespace LaboratoryAPI.Controllers
         /// <param name="patient"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Post([FromQuery]PatientRequest patient)
+        public ActionResult Post([FromBody] PatientRequest patient)
         {
             try
             {
