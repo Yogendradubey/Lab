@@ -125,14 +125,14 @@
 		* GetById : (Get : https://localhost:7120/LabReports/1)
 		* GetByLabTest : (Get : https://localhost:7120/LabReports/1/2021-01-01/2021-12-31)
 		
-#Installation
-	1. Copy code in a folder
-	2. Open LabTest soultion using Microsoft Visual Studio (Lab.sln)
-	3. Build and Run project LabDemo.Api
-	4. Application should run in browser using Swagger UI
-	5. Postman can also be configured (as per above url and payload details) for generating and passing token
+**#Installation**  <br/> 
+	1. Copy code in a folder  <br/> 
+	2. Open LabTest soultion using Microsoft Visual Studio (Lab.sln)  <br/> 
+	3. Build and Run project LabDemo.Api  <br/> 
+	4. Application should run in browser using Swagger UI  <br/> 
+	5. Postman can also be configured (as per above url and payload details) for generating and passing token  <br/> 
 	
-#Steps to run with Swagger
+**#Steps to run with Swagger**
         1. Execute endpoint Register user using postman with user details
 	2. Execute endpoint Login (Credentials as in Login endpoint details above) to generate token
 	3. Once token is generated, copy the generated token
@@ -143,7 +143,7 @@
 	8. Create Patient (if executed Get(), Will get Patient table data)	
 	9. Create LabReport (if executed Get(), Will get LabReport table data)
 
-#Steps to run with Postman
+**#Steps to run with Postman** 
 	1. Configure Postman requests as per information above
 	2. Execute Login (Credentials as above) to generate token
 	3. Once token is generated, copy the generated token to pass with subsequet requests
