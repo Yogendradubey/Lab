@@ -5,7 +5,7 @@ namespace LabDemo.Models
     public enum TestTypeEnum
     {        
         [Description("Glucose tests")]   
-        Glocose,
+        Glocose=1,
         [Description("Complete blood count")]
         BloodCount,
         [Description("Lipid panel")]

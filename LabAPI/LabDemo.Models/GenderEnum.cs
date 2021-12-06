@@ -8,7 +8,7 @@ namespace LabDemo.Models
 {
    public enum GenderEnum
     {
-        Male,
+        Male=1,
         Female,
         Other
     }

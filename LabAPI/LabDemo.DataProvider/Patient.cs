@@ -9,6 +9,7 @@ namespace LabDemo.DataProvider
         public string Name { get; set; }
         public string Mobile { get; set; }
         public string Email { get; set; }
+        public string Address { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime DOB { get; set; }
         public GenderEnum Gender { get; set; }
