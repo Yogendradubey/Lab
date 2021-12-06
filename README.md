@@ -15,7 +15,7 @@ The API has been developed using
 
 ## Overview
 
-To use this API, please close the code from repository, build it and run on local. Follow "Application.docx" file to configure and run project locally 
+To use this API, please clone the code from repository, build it and run on local. Follow instructions in "Application.docx" file to configure and run project locally 
 
 The JWT basic authentication has been implemented to and needs to generate token with valid credential and pass this token as bearer token, to use any API endpoints. The API auth endpoint can be used to generate token by passing credential details as Basic-Auth or using authorization header.
 
