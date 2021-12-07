@@ -8,6 +8,7 @@
 •	AutoMapper.Extensions.Microsoft.DependencyInjection 8.1.1 for object to object mapping <br/>
 •	Repository design Pattern <br/>
 •	Used in memory Database using EF core <br/> 
+•	Added unit testing of api layer in UnitTest project using nunit <br/> 
 
 
 
@@ -79,7 +80,7 @@
 			{
 				"pid": 0,
 				"Name": "Test Patient 1",
-				"dateOfBirth": "1980-08-09T00:00:00",
+				"DOB": "1980-08-09T00:00:00",
 				"gender": 1,
 				"email": "testpatient1@gmail.com",
 				"mobile": "(+91) 98235xxxxx",
@@ -89,7 +90,7 @@
 			{
 				"pid": 1,
 				"Name": "Test Patient 1",
-				"dateOfBirth": "1980-08-09T00:00:00",
+				"DOB": "1980-08-09T00:00:00",
 				"gender": 1,
 				"email": "testpatient1@gmail.com",
 				"mobile": "(+91) 98235xxxxx",
