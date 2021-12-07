@@ -53,16 +53,26 @@ namespace LabDemo.Api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Patient patient)
         {
-            _patientService.AddPatient(patient);
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                _patientService.AddPatient(patient);
+                return Ok();
+            }
+            return BadRequest(ModelState);
+            
         }
 
         // PUT api/<PatientsController>/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Patient patient)
         {
-            _patientService.UpdatePatient(patient);
-            return Ok( );
+            if (ModelState.IsValid)
+            {
+                _patientService.UpdatePatient(patient);
+                return Ok();
+            }
+            return BadRequest(ModelState);
+            
         }
 
         // DELETE api/<PatientsController>/5

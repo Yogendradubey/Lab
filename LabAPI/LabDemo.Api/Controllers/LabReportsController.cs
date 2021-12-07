@@ -42,16 +42,26 @@ namespace LabDemo.Api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] LabReport labReport)
         {
-            _labReportService.AddLabReport(labReport);
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                _labReportService.AddLabReport(labReport);
+                return Ok();
+            }
+            return BadRequest(ModelState);
+            
         }
 
         // PUT api/<LabReportsController>/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] LabReport labReport)
         {
-            _labReportService.UpdateLabReport(labReport);
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                _labReportService.UpdateLabReport(labReport);
+                return Ok();
+            }
+            return BadRequest(ModelState);
+           
         }
 
         // DELETE api/<LabReportsController>/5

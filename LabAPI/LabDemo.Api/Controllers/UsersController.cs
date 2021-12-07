@@ -25,7 +25,7 @@ namespace LabDemo.Api.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid UserName and Password");
+                return BadRequest("Invalid UserName Or Password");
             }
 
             var result = _userService.GetUser(user.UserName, user.Password);
@@ -42,9 +42,9 @@ namespace LabDemo.Api.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Parameter is missing");
+                return BadRequest(ModelState);
             }
-            user.Role = "Admin";
+              user.Role = "Admin";
             _userService.AddUser(user);
 
             return Ok();
