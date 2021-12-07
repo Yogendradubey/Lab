@@ -80,7 +80,7 @@
 			{
 				"pid": 0,
 				"Name": "Test Patient 1",
-				"dateOfBirth": "1980-08-09T00:00:00",
+				"DOB": "1980-08-09T00:00:00",
 				"gender": 1,
 				"email": "testpatient1@gmail.com",
 				"mobile": "(+91) 98235xxxxx",
@@ -90,7 +90,7 @@
 			{
 				"pid": 1,
 				"Name": "Test Patient 1",
-				"dateOfBirth": "1980-08-09T00:00:00",
+				"DOB": "1980-08-09T00:00:00",
 				"gender": 1,
 				"email": "testpatient1@gmail.com",
 				"mobile": "(+91) 98235xxxxx",
