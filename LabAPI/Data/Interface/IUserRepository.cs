@@ -7,7 +7,7 @@ namespace LaboratoryAPI.Data.Interface
 {
     public interface IUserRepository
     {
-        public string CreateUser(string Username, string Password);
+        public void CreateUser(string Username, string Password);
         public string AuthenticateUser(string Username, string Password);
     }
 }

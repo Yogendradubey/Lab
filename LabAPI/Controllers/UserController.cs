@@ -28,16 +28,9 @@ namespace LaboratoryAPI.Controllers
         /// <returns></returns>
         [HttpPost("CreateUser")]
         public ActionResult Post([FromBody] UserRequest userCredential)
-        {
-            try
-            {
-                string userCreated = _db.CreateUser(userCredential.UserName, userCredential.Password);
-                return Ok(userCreated);
-            }
-            catch
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }           
+        {           
+                _db.CreateUser(userCredential.UserName, userCredential.Password);
+                return Ok();                    
         }
 
         /// <summary>

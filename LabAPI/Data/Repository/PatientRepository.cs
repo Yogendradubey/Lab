@@ -28,10 +28,8 @@ namespace LaboratoryAPI.Data.Repository
         }
 
         #region Patient
-        public Patient AddPatient(PatientRequest patient)
-        {
-            try
-            {
+        public void AddPatient(PatientRequest patient)
+        {            
                 Random id = new Random();
                 using (var db = _dbContext)
                 {
@@ -43,28 +41,21 @@ namespace LaboratoryAPI.Data.Repository
                     _patient.CretedOn = DateTime.Now;
                     db.Patient.Add(_patient);
                     db.SaveChanges();
-                    return _patient;
                 }
-            }
-            catch
-            {
-                throw;
-            }
+           
         }
-        public string DeletePatient(int Id)
+        public void DeletePatient(int Id)
         {
             var _record = _dbContext.Patient.Where(x => x.Id == Id).FirstOrDefault();
             if (_record != null)
             {
                 _dbContext.Entry(_record).State = EntityState.Deleted;
                 _dbContext.SaveChanges();
-                return ResponseMessage.CreatedSuccessfully.ToString();
             }
             else
             {
-                return ResponseMessage.RecordNotFound.ToString();
+                throw new ArgumentNullException(_record.Id.ToString());
             }
-            
         }
         public List<Patient> GetAllPatients()
         {
@@ -77,24 +68,17 @@ namespace LaboratoryAPI.Data.Repository
         public List<Patient> GetPatientsByFilter(ReportFilterRequest filter)
         {
             List<Patient> patientsList = null;
-            try
-            {
+           
                 patientsList = (from r in _dbContext.Report
                                               where r.Type.ToString() == filter.Type.ToString() && (r.CreatedOn.Date >= filter.CreatedOnStart.Date && r.CreatedOn.Date <= filter.CreatedOnEnd.Date)
                                               join p in _dbContext.Patient on r.PatientId equals p.Id
                                               select p).ToList<Patient>();
-            }
-            catch
-            {
-                throw;
-            }           
-
+          
             return patientsList;
         }
-        public string UpdatePatient(int id, PatientRequest patient)
+        public void UpdatePatient(int id, PatientRequest patient)
         {
-            try
-            {
+         
                 using (var db = _dbContext)
                 {
                     var existingData = db.Patient.Where(x => x.Id == id).FirstOrDefault();
@@ -108,15 +92,9 @@ namespace LaboratoryAPI.Data.Repository
                     }
                     else
                     {
-                        return ResponseMessage.RecordNotFound.GetDisplayName();
+                    throw new ArgumentNullException(existingData.Id.ToString());
                     }
-                }
-            }
-            catch
-            {
-                throw;
-            }
-            return ResponseMessage.UpdatedSuccessfully.ToString();
+                }          
         }
 
         #endregion

@@ -29,7 +29,7 @@ namespace LaboratoryAPI.Controllers
         /// <param></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult<IEnumerable<Report>> Get()
+        public ActionResult<IEnumerable<Report>> GetReports()
         {
             List<Report> reports = _db.GetAllReports();
             return Ok(reports);
@@ -41,7 +41,7 @@ namespace LaboratoryAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public ActionResult GetReport(int id)
         {
             Report report = _db.GetReport(id);
             return Ok(report);
@@ -53,23 +53,16 @@ namespace LaboratoryAPI.Controllers
         /// <param name="report"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Post([FromBody]ReportRequest report)
+        public ActionResult CreateReport([FromBody] ReportRequest report)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ResponseMessage.NotAValidRequest.ToString());
-                }
-
-                Report savedReport = _db.AddReport(report);
-
-                return Ok(savedReport);
+                return BadRequest();
             }
-            catch
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }            
+
+            _db.AddReport(report);
+
+            return Ok();
         }
 
         /// <summary>
@@ -79,27 +72,22 @@ namespace LaboratoryAPI.Controllers
         /// <param name="report"></param>
         /// <returns></returns>
         [HttpPut]
-        public IActionResult Put(int id, ReportRequest report)
+        public IActionResult UpdateReport(int id, ReportRequest report)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ResponseMessage.NotAValidRequest.ToString());
-                }
-                string isUpdated = _db.UpdateReport(id, report);
-
-                if (isUpdated == ResponseMessage.RecordNotFound.ToString())
-                {
-                    return NotFound(isUpdated);
-                }
+                return BadRequest();
             }
-            catch
+            Report isReportExist = _db.GetReport(id);
+            if (isReportExist == null)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }            
+                return NotFound();
+            }
 
-            return Ok(ResponseMessage.UpdatedSuccessfully.ToString());
+            _db.UpdateReport(id, report);
+
+
+            return Ok();
         }
 
         /// <summary>
@@ -108,16 +96,17 @@ namespace LaboratoryAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult DeleteReport(int id)
         {
-            string isDeleted = _db.DeleteReport(id);
-
-            if (isDeleted == ResponseMessage.RecordNotFound.ToString())
+            Report isReportExist = _db.GetReport(id);
+            if (isReportExist == null)
             {
-                return NotFound(isDeleted);
+                return NotFound();
             }
+            _db.DeleteReport(id);
 
-            return Ok(ResponseMessage.DelectedSuccessfully.ToString());
+
+            return Ok();
         }
     }
 }

@@ -12,9 +12,9 @@ namespace LaboratoryAPI.Data.Interface
     {
         List<Report> GetAllReports();
         Report GetReport(int Id);
-        Report AddReport(ReportRequest report);
-        string UpdateReport(int id, ReportRequest report);
-        string DeleteReport(int Id);
+        void AddReport(ReportRequest report);
+        void UpdateReport(int id, ReportRequest report);
+        void DeleteReport(int Id);
 
     }
 }

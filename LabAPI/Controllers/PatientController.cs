@@ -14,7 +14,7 @@ using static LaboratoryAPI.Data.Model.Enum;
 namespace LaboratoryAPI.Controllers
 {
     [ApiController]
-    [Route ("api/[controller]")]
+    [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     public class PatientController : ControllerBase
     {
@@ -30,7 +30,7 @@ namespace LaboratoryAPI.Controllers
         /// <param></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult<IEnumerable<Patient>> Get()
+        public ActionResult<IEnumerable<Patient>> GetPatients()
         {
             List<Patient> patients = _db.GetAllPatients();
             return Ok(patients);
@@ -42,7 +42,7 @@ namespace LaboratoryAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public ActionResult GetPatient(int id)
         {
             Patient patient = _db.GetPatient(id);
             return Ok(patient);
@@ -54,30 +54,24 @@ namespace LaboratoryAPI.Controllers
         /// <param name="filter"></param>
         /// <returns></returns>
         [HttpGet("GetByReportType")]
-        public ActionResult<IEnumerable<Patient>> Get([FromQuery] ReportFilterRequest filter)
+        public ActionResult<IEnumerable<Patient>> GetReports([FromQuery] ReportFilterRequest filter)
         {
-            try {
-                DateTime temp;
-                if (DateTime.TryParse(filter.CreatedOnStart.ToString(), out temp) && DateTime.TryParse(filter.CreatedOnEnd.ToString(), out temp))
+            DateTime temp;
+            if (DateTime.TryParse(filter.CreatedOnStart.ToString(), out temp) && DateTime.TryParse(filter.CreatedOnEnd.ToString(), out temp))
+            {
+                List<Patient> patients = _db.GetPatientsByFilter(filter);
+                if (patients != null)
                 {
-                    List<Patient> patients = _db.GetPatientsByFilter(filter);
-                    if (patients != null)
-                    {
-                        return Ok(patients);
-                    }
-                    else
-                    {
-                        return NotFound(ResponseMessage.RecordNotFound.ToString());
-                    }
+                    return Ok(patients);
                 }
                 else
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
             }
-            catch
+            else
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return BadRequest();
             }
         }
 
@@ -87,23 +81,16 @@ namespace LaboratoryAPI.Controllers
         /// <param name="patient"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Post([FromBody] PatientRequest patient)
+        public ActionResult CreatePatient([FromBody] PatientRequest patient)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ResponseMessage.NotAValidRequest.ToString());
-                }
-
-                Patient savedPatient = _db.AddPatient(patient);
-
-                return Ok(savedPatient);
+                return BadRequest();
             }
-            catch
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
+
+            _db.AddPatient(patient);
+
+            return Ok();
         }
 
         /// <summary>
@@ -112,27 +99,21 @@ namespace LaboratoryAPI.Controllers
         /// <param name="patient"></param>
         /// <returns></returns>
         [HttpPut]
-        public ActionResult Put(int id, PatientRequest patient)
+        public ActionResult UpdatePatient(int id, PatientRequest patient)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ResponseMessage.NotAValidRequest.ToString());
-                }
-                string IsUpdated = _db.UpdatePatient(id, patient);
-
-                if (IsUpdated == ResponseMessage.RecordNotFound.ToString())
-                {
-                    return NotFound(IsUpdated);
-                }
+                return BadRequest();
             }
-            catch
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }           
+            Patient isPatientExist = _db.GetPatient(id);
 
-            return Ok(ResponseMessage.UpdatedSuccessfully.ToString());
+            if (isPatientExist == null)
+            {
+                return NotFound();
+            }
+            _db.UpdatePatient(id, patient);
+
+            return Ok();
         }
 
         /// <summary>
@@ -141,14 +122,14 @@ namespace LaboratoryAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult DeletePatient(int id)
         {
-            string isDeleted = _db.DeletePatient(id);
-
-            if (isDeleted == ResponseMessage.RecordNotFound.ToString())
+            Patient patient = _db.GetPatient(id);
+            if (patient == null)
             {
-                return NotFound(isDeleted);
+                return NotFound();
             }
+            _db.DeletePatient(id);
 
             return Ok();
         }

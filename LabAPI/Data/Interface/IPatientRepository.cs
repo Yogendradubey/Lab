@@ -12,9 +12,9 @@ namespace LaboratoryAPI.Data.Interface
     {
         List<Patient> GetAllPatients();
         Patient GetPatient(int Id);
-        Patient AddPatient(PatientRequest patient);
-        string UpdatePatient(int id, PatientRequest patient);
-        string DeletePatient(int Id);
+        void AddPatient(PatientRequest patient);
+        void UpdatePatient(int id, PatientRequest patient);
+        void DeletePatient(int Id);
         List<Patient> GetPatientsByFilter(ReportFilterRequest filter);
     }
 }

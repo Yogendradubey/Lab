@@ -11,7 +11,7 @@ using static LaboratoryAPI.Data.Model.Enum;
 
 namespace LaboratoryAPI.Data.Repository
 {
-    public class ReportRepository: IReportRepository
+    public class ReportRepository : IReportRepository
     {
         private readonly LaboratoryDbContext _dbContext;
 
@@ -21,31 +21,25 @@ namespace LaboratoryAPI.Data.Repository
         }
 
         #region Report
-        public Report AddReport(ReportRequest report)
+        public void AddReport(ReportRequest report)
         {
-            try
+
+            Random id = new Random();
+            using (var db = _dbContext)
             {
-                Random id = new Random();
-                using (var db = _dbContext)
-                {
-                    Report _report = new Report();
-                    _report.Id = id.Next(100);
-                    _report.Type = report.Type.ToString();
-                    _report.SampleCollectionDateTime = report.SampleCollectionDateTime;
-                    _report.Result = report.Result.ToString();
-                    _report.CreatedOn = DateTime.Now;
-                    _report.PatientId = report.PatientId;
-                    db.Report.Add(_report);
-                    db.SaveChanges();
-                    return _report;
-                }
+                Report _report = new Report();
+                _report.Id = id.Next(100);
+                _report.Type = report.Type.ToString();
+                _report.SampleCollectionDateTime = report.SampleCollectionDateTime;
+                _report.Result = report.Result.ToString();
+                _report.CreatedOn = DateTime.Now;
+                _report.PatientId = report.PatientId;
+                db.Report.Add(_report);
+                db.SaveChanges();
             }
-            catch
-            {
-                throw;
-            }
+
         }
-        public string DeleteReport(int Id)
+        public void DeleteReport(int Id)
         {
             var record = _dbContext.Report.Where(x => x.Id == Id).FirstOrDefault();
 
@@ -53,11 +47,10 @@ namespace LaboratoryAPI.Data.Repository
             {
                 _dbContext.Entry(record).State = EntityState.Deleted;
                 _dbContext.SaveChanges();
-                return ResponseMessage.DelectedSuccessfully.ToString();
             }
             else
             {
-                return ResponseMessage.RecordNotFound.ToString();
+                throw new ArgumentNullException(record.Id.ToString());
             }
 
         }
@@ -69,33 +62,25 @@ namespace LaboratoryAPI.Data.Repository
         {
             return _dbContext.Report.FirstOrDefault(x => x.Id == Id);
         }
-        public string UpdateReport(int id, ReportRequest report)
+        public void UpdateReport(int id, ReportRequest report)
         {
-            try
-            {
-                using (var db = _dbContext)
-                {
-                    var existingData = db.Report.Where(x => x.Id == id).FirstOrDefault();
-                    if (existingData != null)
-                    {
-                        existingData.Result = report.Result.ToString();
-                        existingData.SampleCollectionDateTime = report.SampleCollectionDateTime;
-                        existingData.Type = report.Type.ToString();
-                        existingData.CreatedOn = DateTime.Now;
-                        db.SaveChanges();
-                    }
-                    else
-                    {
-                        return ResponseMessage.RecordNotFound.ToString();
-                    }
-                }
 
-            }
-            catch
+            using (var db = _dbContext)
             {
-                throw;
+                var existingData = db.Report.Where(x => x.Id == id).FirstOrDefault();
+                if (existingData != null)
+                {
+                    existingData.Result = report.Result.ToString();
+                    existingData.SampleCollectionDateTime = report.SampleCollectionDateTime;
+                    existingData.Type = report.Type.ToString();
+                    existingData.CreatedOn = DateTime.Now;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    throw new ArgumentNullException(existingData.Id.ToString());
+                }
             }
-            return ResponseMessage.UpdatedSuccessfully.ToString();
         }
         #endregion
 

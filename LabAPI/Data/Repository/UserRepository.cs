@@ -55,10 +55,9 @@ namespace LaboratoryAPI.Data.Repository
             return tokenHandler.WriteToken(token);
         }
 
-        public string CreateUser(string username, string password)
+        public void CreateUser(string username, string password)
         {
-            try
-            {
+          
                 Random id = new Random();
                 using (var db = _dbContext)
                 {
@@ -68,13 +67,8 @@ namespace LaboratoryAPI.Data.Repository
                     _user.Password = password;
                     db.UserCredential.Add(_user);
                     db.SaveChanges();
-                    return ResponseMessage.CreatedSuccessfully.ToString();
                 }
-            }
-            catch
-            {
-                throw;
-            }
+           
         }
         #endregion
 
